@@ -34,7 +34,7 @@
     <% } %> <!-- Slutt på tom-sjekk -->
     <% for (const s of songs) { %> <!-- Løkker gjennom alle sanger -->
       <li> <!-- Starter listeelement -->
-        <strong><%= s.title %></strong> av <em><%= s.artist %></em> <!-- Viser tittel og artist trygt -->
+        <strong><%= s.title %></strong> av <em><%= s.artist %></em> fra <%= s.nasjonalitet %> <!-- Viser tittel, artist og nasjonalitet trygt -->
         <span class="muted">— <%= s.listened_date %></span> <!-- Viser dato trygt -->
       </li> <!-- Slutt på listeelement -->
     <% } %> <!-- Slutt på løkke -->

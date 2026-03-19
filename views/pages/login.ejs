@@ -7,10 +7,25 @@
 <% } %> <!-- Slutt på melding-sjekk -->
 
 <section class="card"> <!-- Kort med skjema for å legge til sang -->
+  <h2>side 2</h2> <!-- Seksjonstittel -->
+</section> <!-- Slutt på skjema-kort -->
+
+<section class="card"> <!-- Kort med skjema for å legge til sang -->
   <h2>Create Account</h2> <!-- Seksjonstittel -->
+   <form action="/users" method="POST" class="form"> <!-- Skjema som sender POST til /users -->
+     <!-- Lenke som peker til Express-ruten "/login" (ikke direkte til test.ejs-filen) -->
+    
+    <label for="Username">Username</label> <!-- Etikett for Username -->
+    <input id="Username" name="Username" type="text" required /> <!-- Tekstfelt for Username (påkrevd) -->
+    
+    <label for="password">Password</label> <!-- Etikett for password -->
+    <input id="password" name="password" type="password" required /> <!-- Passordfelt (påkrevd) -->
 
-      <a href="/login">Gå til login-siden</a>
+    <label for="email">Email</label> <!-- Etikett for email -->
+    <input id="email" name="email" type="email" required /> <!-- Email-input (påkrevd) -->
 
+    <button type="submit">Confirm</button> <!-- Sendeknapp for skjemaet -->
+  </form> <!-- Slutt på skjema -->
 </section> <!-- Slutt på skjema-kort -->
 
 <section class="card"> <!-- Kort som viser registrerte sanger -->

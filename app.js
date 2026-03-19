@@ -14,21 +14,23 @@ const app = express(); // Initialiserer Express-appen
 const PORT = 3000; // Standard port for lokal utvikling
 
 // Åpner/oppretter SQLite-databasefilen 'app.db' i prosjektmappen
-const db = new sqlite3.Database(path.join(__dirname, 'sang.db')); // Oppretter/åpner databasefilen der data lagres
 
-// Oppretter 'songs'-tabellen hvis den ikke finnes fra før
+
+const db = new sqlite3.Database(path.join(__dirname, 'users.db')); // Oppretter/åpner databasefilen der data lagres
+
+// Oppretter 'users'-tabellen hvis den ikke finnes fra før
 db.serialize(() => { // Sørger for at SQL-kommandoer kjører i rekkefølge
   db.run(` -- Starter SQL for å lage tabellen
-    CREATE TABLE IF NOT EXISTS songs (               -- Lager tabellen bare hvis den ikke finnes
-      id INTEGER PRIMARY KEY AUTOINCREMENT,          -- Primærnøkkel som øker automatisk
-      title TEXT NOT NULL,                           -- Sangtittel (påkrevd)
-      artist TEXT NOT NULL,                          -- Artistnavn (påkrevd)
-      nasjonalitet TEXT NULL,                             -- Valgfritt felt for artistens nasjonalitet
-      listened_date TEXT NOT NULL                    -- Dato i format YYYY-MM-DD (påkrevd)
-    )                                                -- Slutt på CREATE TABLE
+    CREATE TABLE IF NOT EXISTS users (               -- Lager tabellen bare hvis den ikke finnes
+    userid integer unique not null primary key autoincrement,
+    username text unique not null check(length(username)>=3),
+    email text unique not null,
+    password text not null,
+    created_at datetime not null default current_timestamp                -- Dato i format YYYY-MM-DD (påkrevd)
+    )
+                                  -- Slutt på CREATE TABLE
   `); // Avslutter kjøringen av SQL-setningen
 }); // Avslutter serialize-blokk
-
 // Setter EJS som templatemotor
 app.set('view engine', 'ejs'); // Forteller Express at .ejs-filer skal rendre HTML
 
@@ -61,43 +63,57 @@ function dbRun(sql, params = []) { // Definerer en funksjon for å kjøre skrive
   }); // Avslutter Promise
 } // Avslutter funksjonen dbRun
 
-// GET / - viser skjema for å legge inn sang og lister alle lagrede sanger
+
 app.get('/', async (req, res) => { // Definerer rute for å vise startsiden
   try { // Starter try/catch for feilhandtering
-    const songs = await dbAll( // Henter alle sanger fra databasen
-      'SELECT id, title, artist, listened_date FROM songs ORDER BY listened_date DESC, id DESC', // SQL for å liste sanger
+    const users = await dbAll( // Henter alle brukere fra databasen
+      'SELECT userid, username, email FROM users ORDER BY userid DESC', // SQL for å liste brukere
       [] // Ingen parametere for denne spørringen
-    ); // Avslutter henting av sanger
-    res.render('index', { title: 'Registrer sanger', songs, message: null }); // Renderer index.ejs med data
+    ); // Avslutter henting av brukere
+    res.render('index', { title: 'Registrer sanger', users, message: null }); // Renderer index.ejs med data
   } catch (err) { // Fanger eventuelle feil
     console.error(err); // Logger feilen i konsollen
     res.status(500).send('Noe gikk galt.'); // Sender en enkel feilmelding til klienten
   } // Avslutter try/catch
 }); // Avslutter GET-ruten
 
-// POST /songs - validerer og lagrer en ny sang i databasen
-app.post('/songs', async (req, res) => { // Definerer rute for innsending av nytt sangskjema
+
+// POST /users - validerer og lagrer en ny bruker i databasen
+app.post('/users', async (req, res) => { // Definerer rute for innsending av nytt brukerskjema
   try { // Starter try/catch for å håndtere feil
-    const { title, artist, listened_date, nasjonalitet } = req.body; // Leser ut feltene fra skjemaet
-    if (!title || !artist || !listened_date || !nasjonalitet) { // Sjekker at alle felt er utfylt
-      const songs = await dbAll('SELECT id, title, artist, listened_date, nasjonalitet FROM songs ORDER BY listened_date DESC, id DESC'); // Henter liste for visning ved feil
-      return res.status(400).render('index', { title: 'Registrer sanger', songs, message: 'Fyll ut tittel, artist og dato.' }); // Viser feilmelding
+    const { username, email } = req.body; // Leser ut feltene fra skjemaet
+    if (!username || !email) { // Sjekker at alle felt er utfylt
+      const users = await dbAll('SELECT userid, username, email FROM users ORDER BY userid DESC'); // Henter liste for visning ved feil
+      return res.status(400).render('login', { title: 'Registrer sanger', users, message: 'Fyll ut brukernavn og e-post.' }); // Viser feilmelding
     } // Avslutter validering for tomme felt
     if (!/^\d{4}-\d{2}-\d{2}$/.test(listened_date)) { // Sjekker at dato har format YYYY-MM-DD
-      const songs = await dbAll('SELECT id, title, artist, listened_date , nasjonalitetFROM songs ORDER BY listened_date DESC, id DESC'); // Henter liste for visning ved feil
-      return res.status(400).render('index', { title: 'Registrer sanger', songs, message: 'Dato må være i format YYYY-MM-DD.' }); // Viser feilmelding om datoformat
+      const users = await dbAll('SELECT userid, username, email FROM users ORDER BY userid DESC'); // Henter liste for visning ved feil
+      return res.status(400).render('login', { title: 'Register User', users, message: 'Date must be in format YYYY-MM-DD.' }); // Viser feilmelding om datoformat
     } // Avslutter datoformat-sjekk
     await dbRun( // Kjører INSERT for å lagre sangen
-      'INSERT INTO songs (title, artist, listened_date, nasjonalitet) VALUES (?, ?, ?, ?)', // SQL med parametere
-      [title.trim(), artist.trim(), listened_date , nasjonalitet.trim()] // Verdier å sette inn (trim fjerner ekstra mellomrom)
+      'INSERT INTO users (username, email) VALUES (?, ?)', // SQL med parametere
+      [username.trim(), email.trim()] // Verdier å sette inn (trim fjerner ekstra mellomrom)
     ); // Avslutter INSERT
     res.redirect('/'); // Sender brukeren tilbake til forsiden for å se oppdatert liste
   } catch (err) { // Fanger uventede feil
     console.error(err); // Logger feilen
-    const songs = await dbAll('SELECT id, title, artist, listened_date, nasjonalitet FROM songs ORDER BY listened_date DESC, id DESC'); // Henter liste for visning ved feil
-    res.status(500).render('index', { title: 'Registrer sanger', songs, message: 'Kunne ikke lagre sangen.' }); // Viser generell feilmelding
+    const users = await dbAll('SELECT userid, username, email FROM users ORDER BY userid DESC'); // Henter liste for visning ved feil
+    res.status(500).render('login', { title: 'Register User', users, message: 'Kunne ikke lagre brukeren.' }); // Viser generell feilmelding
   } // Avslutter try/catch
 }); // Avslutter POST-ruten
+
+// Definerer login-rute "/login"
+app.get('/login', (req, res) => { // Håndterer GET-forespørsler til "/login"
+  res.render('login', { title: 'Logg inn' }); // Rendre views/login.ejs og send inn title-variabelen
+}); // Avslutter login-ruten
+
+app.get('/register', (req, res) => {
+  res.render('register', { title: 'Registrer bruker' });
+});
+
+app.get('/chat', (req, res) => {
+  res.render('chat', { title: 'Chat' });
+});
 
 // Starter serveren
 app.listen(PORT, () => { // Ber Express lytte på definert port

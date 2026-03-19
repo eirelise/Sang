@@ -1,16 +1,29 @@
+:root {
+  /* Fargevariabler for enkel tilpasning */
+  --pc: #818181; /*primary color*/
+  --sc: #afafaf; /* Hover-farge for knapper */
+  --bg: #dcdee3; /* Bakgrunnsfarge */
+  --text: #222; /* Tekstfarge */
+  --btntext: #222; /* Knappetekstfarge */
+  --cardbg: white; /* Kortbakgrunn */
+  --cardb: #797979; /* Kantfarge */
+  --weaktext: #555; /* Dempet tekstfarge */
+}
+
+
+
 /* Grunnstil for hele siden */ 
 body { /* Body-elementet */
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; /* Lesbar fontfamilie */
   margin: 0; /* Fjerner standard margin */
   padding: 0; /* Fjerner standard padding */
-  background: #f6f7fb; /* Lys bakgrunnsfarge */
-  color: #222; /* Mørk tekst for god kontrast */
+  background: var(--bg); /* Lys bakgrunnsfarge */
+  color: var(--text); /* Mørk tekst for god kontrast */
 }
 
 /* Toppnavigasjon */
 .site-header { /* Header-område */
-  background: white; /* Hvit bakgrunn */
-  border-bottom: 1px solid #e5e7eb; /* Tynn bunnramme */
+  background: var(--cardbg); /* Hvit bakgrunn */
   padding: 12px 16px; /* Indre luft */
 }
 
@@ -18,13 +31,17 @@ body { /* Body-elementet */
 .nav { /* Navigasjonscontainer */
   display: flex; /* Bruker flex-layout */
   align-items: center; /* Sentrerer vertikalt */
+  padding: 8px; /* Indre luft */
+  border-radius: 8px; /* Runde hjørner */
+  border: 3px solid var(--cardb); /* Lys kant */
   justify-content: space-between; /* Plasserer elementer i hver sin ende */
 }
 
 /* Brand/lenke-stil */
 .brand { /* Logo/brand-lenken */
+  font-size: 50px; /* Større skrift for brand */
   font-weight: 700; /* Fet skrift */
-  color: #0f766e; /* Teal-farge */
+  color: var(--pc); /* Teal-farge */
   text-decoration: none; /* Ingen understrek */
 }
 
@@ -37,12 +54,12 @@ body { /* Body-elementet */
 
 /* Kort-komponent */
 .card { /* Panel med kant og bakgrunn */
-  background: white; /* Hvit bakgrunn */
-  border: 1px solid #e5e7eb; /* Lys kant */
+  background: var(--cardbg); /* Hvit bakgrunn */
+  border: 1px solid var(--cardb); /* Lys kant */
   border-radius: 8px; /* Runde hjørner */
   padding: 16px; /* Indre luft */
   margin-bottom: 16px; /* Avstand under */
-  box-shadow: 0 1px 2px rgba(0,0,0,0.04); /* Lett skygge */
+  box-shadow: 0 1px 2px var(--cardb); /* Lett skygge */
 }
 
 /* Skjemalayout */
@@ -54,32 +71,34 @@ body { /* Body-elementet */
 /* Input-felt */
 input { /* Tekst- og dato-inputs */
   padding: 10px; /* Indre luft for klikkflate */
-  border: 1px solid #cbd5e1; /* Lys grå kant */
+  border: 1px solid var(--cardb); /* Lys grå kant */
   border-radius: 6px; /* Runde hjørner */
   font-size: 16px; /* Lesbar skriftstørrelse */
 }
 
 /* Knapper */
 button { /* Generell knappestil */
-  background: #0ea5e9; /* Blå bakgrunn */
-  color: white; /* Hvit tekst */
+  background: var(--pc); /* Blå bakgrunn */
+  color: var(--btntext); 
   border: none; /* Ingen kantlinje */
   border-radius: 6px; /* Runde hjørner */
   padding: 10px 14px; /* Indre luft */
   font-size: 16px; /* Lesbar skriftstørrelse */
   cursor: pointer; /* Pekehånd ved hover */
 }
-
+li{
+  list-style: none;
+}
 /* Hover-effekt for knapp */
 button:hover { /* Når musen er over knappen */
-  background: #0284c7; /* Litt mørkere blå */
+  background: var(--sc); /* Litt mørkere blå */
 }
 
 /* Meldingsboks */
 .notice { /* Stil for informasjons-/feilmeldinger */
-  background: #ecfeff; /* Lys blå bakgrunn */
-  border: 1px solid #bae6fd; /* Lys blå kantlinje */
-  color: #0c4a6e; /* Mørk blå tekst */
+  background: var(--bg); /* Lys blå bakgrunn */
+  border: 1px solid var(--cardb); /* Lys blå kantlinje */
+  color: var(--text); /* Mørk blå tekst */
   padding: 10px; /* Indre luft */
   border-radius: 6px; /* Runde hjørner */
   margin: 12px 0; /* Avstand over og under */
@@ -87,6 +106,67 @@ button:hover { /* Når musen er over knappen */
 
 /* Dempet hjelpetekst */
 .muted { /* Mindre fremhevet tekst */
-  color: #555; /* Grå farge */
+  color: var(--weaktext); /* Grå farge */
   font-size: 14px; /* Litt mindre størrelse */
+}
+.light { /* Lys modus-stil */
+   --pc: #818181; /*primary color*/
+  --sc: #686868; /* Hover-farge for knapper */
+  --bg: #dcdee3; /* Bakgrunnsfarge */
+  --text: #222; /* Tekstfarge */
+  --btntext: #222; /* Knappetekstfarge */
+  --cardbg: white; /* Kortbakgrunn */
+  --cardb: #e5e7eb; /* Kantfarge */
+  --weaktext: #555; /* Dempet tekstfarge */
+}
+
+.dark { /* Mørk modus-stil */
+ --pc: #bbbbbb; /*primary color*/
+  --sc: #afafaf; /* Hover-farge for knapper */
+  --bg: #1e1e1e; /* Bakgrunnsfarge */
+  --text: #ffffff; /* Tekstfarge */
+  --btntext: #222; /* Knappetekstfarge */
+  --cardbg: #2c2c2c; /* Kortbakgrunn */
+  --cardb: #444; /* Kantfarge */
+  --weaktext: #555; /* Dempet tekstfarge */
+}
+
+.volcanic { /* Vulkanmodus-stil */
+ --pc: #a3421e; /*primary color*/
+  --sc: #d15c2a; /* Hover-farge for knapper */
+  --bg: #bc4e26; /* Bakgrunnsfarge */
+  --text: #222; /* Tekstfarge */
+  --cardbg: #ee9b6b; /* Kortbakgrunn */
+  --cardb: #e07b5c; /* Kantfarge */
+  --weaktext: #555; /* Dempet tekstfarge */
+}
+
+.ocean { /* Havmodus-stil */
+ --pc: #1d69b4; /*primary color*/
+  --sc: #155d8b; /* Hover-farge for knapper */
+  --bg: #d0e7f9; /* Bakgrunnsfarge */
+  --text: #222; /* Tekstfarge */
+  --cardbg: #a9d0f5; /* Kortbakgrunn */
+  --cardb: #7bb1e0; /* Kantfarge */
+  --weaktext: #555; /* Dempet tekstfarge */
+}
+
+.forest { /* Skogmodus-stil */
+ --pc: #6f8a2b; /*primary color*/
+  --sc: #839c42; /* Hover-farge for knapper */
+  --bg: #8a9769; /* Bakgrunnsfarge */
+  --text: #222; /* Tekstfarge */
+  --cardbg: #b4c7a3; /* Kortbakgrunn */
+  --cardb: #a3c293; /* Kantfarge */
+  --weaktext: #555; /* Dempet tekstfarge */
+}
+
+.desert { /* Ørkenmodus-stil */
+ --pc: #8c5512; /*primary color*/
+  --sc: #ac7e5c; /* Hover-farge for knapper */
+  --bg: #f5deb3; /* Bakgrunnsfarge */
+  --text: #222; /* Tekstfarge */
+  --cardbg: #deb887; /* Kortbakgrunn */
+  --cardb: #d2b48c; /* Kantfarge */
+  --weaktext: #555; /* Dempet tekstfarge */
 }

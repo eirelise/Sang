@@ -6,10 +6,40 @@
   <title><%= title %></title> <!-- Setter side-tittel dynamisk fra serveren -->
   <link rel="stylesheet" href="/styles.css" /> <!-- Kobler til ekstern CSS fra /public -->
 </head> <!-- Slutt på head -->
+
 <body> <!-- Starter body-innhold -->
   <header class="site-header"> <!-- Toppseksjon -->
-    <nav class="nav"> <!-- Navigasjonslinje -->
-      <a href="/" class="brand">Alpha Sangregister</a> <!-- Lenke/brand til forsiden -->
+
+<a href="/" class="brand">Fafo</a> <!-- Lenke/brand til forsiden -->
+    
+<nav class="nav"> <!-- Navigasjonslinje -->
+      
+      <li>
+        <a href="/login">Log in</a>
+        <a href="/chat">Chat</a>
+        <a href="/friends">Friends</a>
+        <a href="/Account">Account</a>
+      </li>
+      <li>
+        <button id="themeBtn">Change Theme</button>
+      </li>
     </nav> <!-- Slutt på nav -->
+
+
   </header> <!-- Slutt på header -->
   <main class="container"> <!-- Starter hovedinnhold (lukkes i footer-partial) -->
+    <script>
+const themeBtn = document.getElementById("themeBtn");
+
+const themes = [
+    "light",
+    "dark",
+];
+
+let currentTheme = 0;
+
+themeBtn.addEventListener("click", () => {
+  document.body.classList.remove(themes[currentTheme]);
+  currentTheme = (currentTheme + 1) % themes.length;
+  document.body.classList.add(themes[currentTheme]);
+});</script>
